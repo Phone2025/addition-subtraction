@@ -13,8 +13,8 @@
 </style>
 <script>
 const SETTINGS = {
-  // Your Google Apps Script web app link (the same one your worksheets and check-in use)
-  sheetUrl: "https://script.google.com/macros/s/AKfycbz332VdjOCtBMh-_VEyCLTx9tTdkh_AZR1TXDxPrZ77WskVNP6b4prspLMpYGrP39KT/exec",
+  // The web app link (ends in /exec) from the Apps Script in your 'Y3 Maths Assessments' Sheet
+  sheetUrl: "PASTE_THE_NEW_EXEC_LINK_HERE",
   // Name of the tab that results go into in your Google Sheet
   sheetTab: "Y3 Aut B2 Add Sub Assessment A",
   // Who to say the answers are sent to
@@ -223,7 +223,34 @@ function queue(){clearTimeout(timer);timer=setTimeout(()=>send(S.done?"Finished"
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&SHEET_ON&&S.name){try{navigator.sendBeacon(SETTINGS.sheetUrl,new Blob([payload(S.done?"Finished":"In progress (Q"+(S.q+1)+")")],{type:"text/plain"}));}catch(e){}}});
 
 /* ===================== read aloud ===================== */
-function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;speechSynthesis.speak(u);}catch(e){}}
+// Best-sounding voices first. The page uses the first one the device has.
+const VOICE_PREFS=[
+  /Serena.*(Premium|Enhanced)/i, /Daniel.*(Premium|Enhanced)/i, /Kate.*(Premium|Enhanced)/i, /Stephanie.*(Premium|Enhanced)/i,
+  /Sonia.*Natural/i, /Libby.*Natural/i, /Maisie.*Natural/i, /Ryan.*Natural/i,
+  /Google UK English Female/i, /Google UK English Male/i,
+  /Serena/i, /Kate/i, /Daniel/i, /Stephanie/i, /Martha/i, /Arthur/i, /Hazel/i, /Susan/i, /George/i
+];
+let VOICE=null;
+function pickVoice(){
+  try{
+    const vs=speechSynthesis.getVoices(); if(!vs.length) return;
+    const gb=vs.filter(v=>/en[-_]GB/i.test(v.lang));
+    for(const re of VOICE_PREFS){const v=gb.find(x=>re.test(x.name))||vs.find(x=>re.test(x.name)&&/^en/i.test(x.lang));if(v){VOICE=v;return;}}
+    VOICE=gb.find(v=>v.localService)||gb[0]||vs.find(v=>/^en/i.test(v.lang))||null;
+  }catch(e){}
+}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice;}catch(e){}
+function speak(t){
+  try{
+    speechSynthesis.cancel(); if(!VOICE) pickVoice();
+    // Read one sentence at a time so there is a natural pause between them
+    const parts=t.match(/[^.?!]+[.?!]?/g)||[t];
+    const natural=VOICE&&/Natural|Premium|Enhanced|Google/i.test(VOICE.name);
+    parts.forEach(p=>{p=p.trim();if(!p)return;
+      const u=new SpeechSynthesisUtterance(p);u.lang="en-GB";if(VOICE)u.voice=VOICE;
+      u.rate=natural?0.9:0.8;u.pitch=1;speechSynthesis.speak(u);});
+  }catch(e){}
+}
 
 /* ===================== screens ===================== */
 const app=document.getElementById("app"), nav=document.getElementById("nav");
