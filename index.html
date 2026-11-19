@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Year 3 Assessment · Addition and subtraction</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   SETTINGS — the only part you need to edit
+   ===================================================================== */
+</style>
+<script>
+const SETTINGS = {
+  // Your Google Apps Script web app link (the same one your worksheets and check-in use)
+  sheetUrl: "https://script.google.com/macros/s/AKfycbz332VdjOCtBMh-_VEyCLTx9tTdkh_AZR1TXDxPrZ77WskVNP6b4prspLMpYGrP39KT/exec",
+  // Name of the tab that results go into in your Google Sheet
+  sheetTab: "Y3 Aut B2 Add Sub Assessment A",
+  // Who to say the answers are sent to
+  teacher: "your teacher",
+  // Paste your class lists here (same names as your Morning Check-in)
+  classes: {
+    "3D": ["Bareerah","Tarfah","Zaha","Myra","Sebastian","Safiyah","Layan","Waliuddin","Maaiz Safi","Khadijah","Hashim","Sienna","Noah","Yasmeen","Louis","Max","Rayyan","Alana","Jibreel","Areeba","Hirunya","Jtouch","Livia","William"],
+    "3Q": ["Suleiman","Julia","Emilia","Elyas","Maier Musa","Eleni","Souheil","Lina","Ayla","Airah","Ghady","Ved","Emily","Jack","Angus","Dala","Nurulayn","Sofia","Musa","Hamza","Matilda","Tala","Zen","Ruari"],
+    "3S": ["Layan","Saud","Alya","Robert","Arya","Sofia","Vivian","Elliott","William","Wilbur","Iris","Joury","Noah","Haya","Hamish","Olivia","Luana","Lucas","Jake","Alexander","Penelope","Isabella","Yusef","Kobe"]
+  }
+};
+</script>
+<style>
+:root{
+  --navy:#14284b; --navy2:#1f3a6b; --blue:#2f5fa7; --sky:#e8f0fb;
+  --gold:#e0a526; --gold2:#f6d77a; --cream:#fffaf0; --ink:#14284b;
+  --line:#9fbbe4; --ok:#2e7d4f; --r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--cream);color:var(--ink);font-family:"Playpen Sans",system-ui,sans-serif;font-size:20px;line-height:1.5}
+button,input,textarea{font-family:inherit;font-size:inherit;color:inherit}
+header{background:var(--navy);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:14px;border-bottom:6px solid var(--gold)}
+header .badge{background:var(--gold);color:var(--navy);font-weight:700;border-radius:12px;padding:4px 12px;font-size:16px}
+header h1{font-size:22px;margin:0;font-weight:600;flex:1}
+header .who{font-size:16px;opacity:.9}
+main{max-width:860px;margin:0 auto;padding:20px 16px 120px}
+.card{background:#fff;border-radius:var(--r);box-shadow:0 4px 0 #e7dcc3,0 8px 24px rgba(20,40,75,.08);padding:26px 24px;border:2px solid #f0e6cf}
+.qhead{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.qnum{flex:none;width:52px;height:52px;border-radius:50%;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-weight:700;font-size:26px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+.qtext{flex:1;font-size:22px}
+.qtext p{margin:0 0 6px}
+.speak{flex:none;border:2px solid var(--line);background:var(--sky);border-radius:14px;width:52px;height:52px;font-size:24px;cursor:pointer}
+.speak:active{transform:scale(.95)}
+.marks{font-size:15px;color:#6b7a95;text-align:right;margin-top:14px}
+.row{display:flex;flex-wrap:wrap;gap:34px;justify-content:center;align-items:center;margin:14px 0}
+.sentence{display:flex;align-items:center;justify-content:center;gap:12px;font-size:28px;margin:18px 0;flex-wrap:wrap}
+input.box{width:130px;height:62px;border:3px solid var(--navy2);border-radius:12px;text-align:center;font-size:28px;font-weight:600;background:#fff}
+input.box:focus, input.dig:focus, textarea:focus{outline:4px solid var(--gold);outline-offset:1px}
+.answerline{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:22px;font-size:20px}
+/* part-whole */
+.pw{position:relative;width:260px;height:200px}
+.pw svg{position:absolute;inset:0}
+.circ{position:absolute;width:88px;height:88px;border-radius:50%;border:3px solid var(--navy);background:#fff;display:grid;place-items:center;font-size:26px;font-weight:600}
+.circ input{width:74px;height:50px;border:none;text-align:center;font-size:26px;font-weight:600;background:var(--sky);border-radius:10px}
+/* counters */
+.counters{display:grid;grid-template-columns:repeat(10,auto);gap:8px;justify-content:center;margin:10px 0 18px}
+.ctr{width:50px;height:50px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;border:2px solid rgba(0,0,0,.25);color:#14284b}
+.c100{background:#5cae4f;color:#fff}.c10{background:#f3c43b}.c1{background:#e8634c;color:#fff}
+/* bar models */
+.bar{display:grid;border:3px solid var(--navy);border-radius:6px;overflow:hidden;width:320px}
+.bar div{border:1.5px solid var(--navy);display:grid;place-items:center;height:64px;font-size:24px;font-weight:600}
+.bar input{width:110px;height:48px;border:none;background:var(--sky);border-radius:8px;text-align:center;font-size:24px;font-weight:600}
+/* column grids */
+table.grid{border-collapse:collapse;margin:8px auto}
+table.grid td{width:58px;height:58px;border:1.5px solid var(--line);text-align:center;font-size:28px;font-weight:600;padding:0;position:relative}
+table.grid td.h{font-size:22px;color:var(--navy2);background:var(--sky)}
+table.grid tr.ans td.pv{border-top:4px solid var(--navy)}
+table.grid tr.ans td.pv,table.grid tr.ansb td.pv{border-bottom:4px solid var(--navy)}
+input.dig{width:48px;height:48px;border:2.5px solid var(--blue);border-radius:10px;text-align:center;font-size:28px;font-weight:700;background:#fff;padding:0}
+input.dig.carry{width:36px;height:36px;font-size:20px;border-style:dashed;border-color:#8aa}
+.gridnote{font-size:15px;color:#6b7a95;text-align:center;margin-top:4px}
+textarea{width:100%;min-height:150px;border:3px solid var(--navy2);border-radius:14px;padding:14px;font-size:22px;resize:vertical;background:#fff}
+.label{font-weight:600;margin:16px 0 8px}
+/* nav */
+nav.bottom{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:4px solid var(--gold);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.btn{border:none;border-radius:16px;padding:14px 26px;font-weight:700;font-size:22px;cursor:pointer;background:var(--navy);color:#fff;box-shadow:0 4px 0 #0b1830}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #0b1830}
+.btn.gold{background:var(--gold);color:var(--navy);box-shadow:0 4px 0 #a67712}
+.btn.ghost{background:var(--sky);color:var(--navy);box-shadow:0 4px 0 #b9cbe6}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--navy);display:grid;place-items:center;font-size:15px;font-weight:700;background:#fff;cursor:pointer}
+.dot.done{background:var(--gold2)}
+.dot.now{background:var(--navy);color:#fff}
+/* login */
+.title{text-align:center;margin:10px 0 22px}
+.title h2{font-size:32px;margin:0 0 4px}
+.title p{margin:0;color:#4b5d80}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.choice{border:3px solid var(--navy);background:#fff;border-radius:18px;padding:18px 10px;font-size:22px;font-weight:600;cursor:pointer;box-shadow:0 4px 0 var(--navy)}
+.choice:active{transform:translateY(3px);box-shadow:0 1px 0 var(--navy)}
+.choice.big{font-size:34px;padding:28px}
+.center{text-align:center}
+.review li{margin:6px 0}
+.miss{color:#b4441f;font-weight:600}
+.copy{font-size:13px;color:#8a93a6;text-align:center;margin-top:30px}
+@media (max-width:560px){html,body{font-size:18px}table.grid td{width:46px;height:46px}input.dig{width:40px;height:40px;font-size:24px}.counters{grid-template-columns:repeat(5,auto)}}
+</style>
+</head>
+<body>
+<header><span class="badge">Year 3</span><h1>Addition and subtraction · Assessment</h1><span class="who" id="who"></span></header>
+<main id="app"></main>
+<nav class="bottom" id="nav" style="display:none"></nav>
+
+<script>
+/* ===================== QUESTIONS ===================== */
+// Each marked part: id, answer, marks. Explanations (Q9, Q10) are marked by the teacher.
+const QS = [
+ {n:1, marks:2, say:"Complete the part-whole models.", parts:[{id:"1a",ans:200},{id:"1b",ans:800}],
+  html:()=>`<div class="qtext"><p>Complete the part-whole models.</p></div>`,
+  body:()=>`<div class="row">${pw("top",500,300,"1a")}${pw("bottom",500,300,"1b")}</div>`},
+ {n:2, marks:1, say:"Alex has 262 stickers. She buys 6 more stickers. How many stickers does Alex have now?", parts:[{id:"2",ans:268}],
+  html:()=>`<div class="qtext"><p>Alex has 262 stickers.</p><p>She buys 6 more stickers.</p><p>How many stickers does Alex have now?</p></div>`,
+  body:()=>`<div class="answerline">${box("2")} stickers</div>`},
+ {n:3, marks:1, say:"Complete the number sentence. 522 equals 8 plus what?", parts:[{id:"3",ans:514}],
+  html:()=>`<div class="qtext"><p>Complete the number sentence.</p></div>`,
+  body:()=>`<div class="sentence">522 = 8 + ${box("3")}</div>`},
+ {n:4, marks:3, say:"Work out the calculations. 17 plus 42. 55 subtract 19. 134 plus 82.", parts:[{id:"4a",ans:59},{id:"4b",ans:36},{id:"4c",ans:216}],
+  html:()=>`<div class="qtext"><p>Work out the calculations.</p></div>`,
+  body:()=>`<div class="sentence">17 + 42 = ${box("4a")}</div><div class="sentence">55 − 19 = ${box("4b")}</div><div class="sentence">134 + 82 = ${box("4c")}</div>`},
+ {n:5, marks:1, say:"Tommy makes this number. He subtracts 40. What is Tommy's new number?", parts:[{id:"5",ans:655}],
+  html:()=>`<div class="qtext"><p>Tommy makes this number.</p></div>`,
+  body:()=>`<div class="counters">${ctrs([100,100,100,10,10,10,10,10,1,1,100,100,100,10,10,10,10,1,1,1])}</div>
+   <div class="qtext"><p>He subtracts 40.</p><p>What is Tommy’s new number?</p></div><div class="answerline">${box("5")}</div>`},
+ {n:6, marks:1, say:"Work out 453 plus 537. Use the column method. Start with the ones.", parts:[{id:"6",ans:990,cells:["6th","6h","6t","6o"]}],
+  html:()=>`<div class="qtext"><p>Work out 453 + 537</p></div>`,
+  body:()=>grid({rows:[[" ","","4","5","3"],["+","","5","3","7"]],ans:"6",exch:"6x"})+`<p class="gridnote">Start with the ones. Write any exchanges in the small dashed boxes.</p>`},
+ {n:7, marks:2, say:"Complete the bar models.", parts:[{id:"7a",ans:621},{id:"7b",ans:300}],
+  html:()=>`<div class="qtext"><p>Complete the bar models.</p></div>`,
+  body:()=>`<div class="row">
+   <div class="bar" style="grid-template-columns:376fr 245fr"><div style="grid-column:1/3;background:#fff">${inp("7a")}</div><div style="background:#fff5a8">376</div><div style="background:#dfe9b4">245</div></div>
+   <div class="bar" style="grid-template-columns:277fr 300fr"><div style="grid-column:1/3;background:#cfe7f1">577</div><div style="background:#f8cde3">277</div><div style="background:#fff">${inp("7b")}</div></div></div>`},
+ {n:8, marks:2, say:"Fill in the missing digits.", parts:[{id:"8a",ans:9},{id:"8b",ans:4}],
+  html:()=>`<div class="qtext"><p>Fill in the missing digits.</p></div>`,
+  body:()=>grid8()+`<p class="gridnote">Write any exchanges in the small dashed boxes.</p>`},
+ {n:9, marks:1, teacher:true, say:"Explain the mistake.", parts:[{id:"9",text:true}],
+  html:()=>`<div class="qtext"><p>Explain the mistake.</p></div>`,
+  body:()=>gridStatic([["","","7","4","2"],["−","","","6","7"]],["","","7","2","5"])+`<div class="label">What has gone wrong?</div><textarea id="i9" data-id="9" placeholder="Type your explanation here…"></textarea>`},
+ {n:10, marks:1, teacher:true, say:"Rosie wants to work out 102 subtract 98 mentally. Explain a method that Rosie could use.", parts:[{id:"10",text:true}],
+  html:()=>`<div class="qtext"><p>Rosie wants to work out 102 − 98 mentally.</p><p>Explain a method that Rosie could use.</p></div>`,
+  body:()=>`<textarea id="i10" data-id="10" placeholder="Type your method here…"></textarea>`}
+];
+const TOTAL = QS.reduce((s,q)=>s+q.marks,0);
+const AUTO = QS.filter(q=>!q.teacher).reduce((s,q)=>s+q.marks,0);
+
+/* ===================== little builders ===================== */
+const inp=(id,cls="")=>`<input class="${cls}" id="i${id}" data-id="${id}" inputmode="numeric" autocomplete="off" aria-label="answer">`;
+const box=id=>inp(id,"box");
+function pw(type,a,b,id){
+  // top: whole 500 at top, parts 300 and ? ; bottom: parts 500 and 300 at top, whole ? below
+  const P=(x,y,content)=>`<div class="circ" style="left:${x}px;top:${y}px">${content}</div>`;
+  if(type==="top") return `<div class="pw"><svg viewBox="0 0 260 200"><line x1="130" y1="50" x2="60" y2="150" stroke="#14284b" stroke-width="3"/><line x1="130" y1="50" x2="200" y2="150" stroke="#14284b" stroke-width="3"/></svg>${P(86,0,a)}${P(16,108,b)}${P(156,108,inp(id))}</div>`;
+  return `<div class="pw"><svg viewBox="0 0 260 200"><line x1="60" y1="50" x2="130" y2="150" stroke="#14284b" stroke-width="3"/><line x1="200" y1="50" x2="130" y2="150" stroke="#14284b" stroke-width="3"/></svg>${P(16,0,a)}${P(156,0,b)}${P(86,108,inp(id))}</div>`;
+}
+function ctrs(list){return list.map(v=>`<div class="ctr c${v}">${v}</div>`).join("");}
+const hdr=`<tr><td></td><td></td><td class="h">H</td><td class="h">T</td><td class="h">O</td></tr>`;
+function grid({rows,ans,exch}){
+  let h=`<table class="grid">${hdr}`;
+  rows.forEach(r=>{h+=`<tr>${r.map((c,i)=>`<td${i>=2?' class="pv"':''}>${c}</td>`).join("")}</tr>`;});
+  // answer row: thousands column (2nd col) + H T O, entered right to left
+  h+=`<tr class="ans"><td></td><td>${dig(ans+"th",4)}</td><td class="pv">${dig(ans+"h",3)}</td><td class="pv">${dig(ans+"t",2)}</td><td class="pv">${dig(ans+"o",1)}</td></tr>`;
+  h+=`<tr><td></td><td>${dig(exch+"th",9,true)}</td><td>${dig(exch+"h",8,true)}</td><td>${dig(exch+"t",7,true)}</td><td></td></tr></table>`;
+  return h;
+}
+function grid8(){
+  return `<table class="grid">${hdr}
+   <tr><td></td><td></td><td class="pv">3</td><td class="pv">8</td><td class="pv">9</td></tr>
+   <tr><td>+</td><td></td><td class="pv"></td><td class="pv">${dig("8a",1)}</td><td class="pv">6</td></tr>
+   <tr class="ans"><td></td><td></td><td class="pv">${dig("8b",2)}</td><td class="pv">8</td><td class="pv">5</td></tr>
+   <tr><td></td><td></td><td>${dig("8xh",8,true)}</td><td>${dig("8xt",7,true)}</td><td></td></tr></table>`;
+}
+function gridStatic(rows,ansRow){
+  let h=`<table class="grid">${hdr}`;
+  rows.forEach(r=>{h+=`<tr>${r.map((c,i)=>`<td${i>=2?' class="pv"':''}>${c}</td>`).join("")}</tr>`;});
+  h+=`<tr class="ans">${ansRow.map((c,i)=>`<td${i>=2?' class="pv"':''}>${c}</td>`).join("")}</tr><tr><td></td><td></td><td></td><td></td><td></td></tr></table>`;
+  return h;
+}
+function dig(id,order,carry){return `<input class="dig${carry?' carry':''}" id="i${id}" data-id="${id}" data-order="${order}" inputmode="numeric" maxlength="1" autocomplete="off" aria-label="${carry?'exchange':'digit'}">`;}
+
+/* ===================== state ===================== */
+const KEY="y3-autb2-addsub-A";
+let S={cls:"",name:"",ans:{},q:0,done:false,started:""};
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY+"|"+S.cls+"|"+S.name)||"null");if(s)S=Object.assign(S,s);}catch(e){}}
+function save(){try{localStorage.setItem(KEY+"|"+S.cls+"|"+S.name,JSON.stringify(S));}catch(e){}}
+
+/* ===================== marking ===================== */
+function val(id){return (S.ans[id]||"").toString().trim();}
+function partValue(p){
+  if(p.cells) return p.cells.map(val).join("").replace(/^0+/,"");
+  if(p.text) return val(p.id);
+  return val(p.id).replace(/[\s,]/g,"");
+}
+function markPart(p){ if(p.text) return null; const v=partValue(p); return v!=="" && Number(v)===p.ans ? 1:0; }
+function autoScore(){let s=0;QS.forEach(q=>q.parts.forEach(p=>{const m=markPart(p);if(m)s+=m;}));return s;}
+function answered(q){return q.parts.every(p=>partValue(p)!=="");}
+
+/* ===================== Sheet ===================== */
+const SHEET_ON=/^https:\/\/script\.google\.com\//.test(SETTINGS.sheetUrl);
+function payload(status){
+  const fin=status==="Finished";
+  const cols=[["Class",S.cls],["Status",status],["Auto-marked score (/"+AUTO+")",autoScore()],["Started",S.started]];
+  QS.forEach(q=>q.parts.forEach(p=>{
+    const v=partValue(p);
+    cols.push(["Q"+p.id+(p.text?" explanation":""), v]);
+    if(!p.text) cols.push(["Q"+p.id+" ✓", v===""?(fin?0:""):markPart(p)]);
+  }));
+  cols.push(["Q6 exchanges",["6xth","6xh","6xt"].map(val).join(" ").trim()]);
+  return JSON.stringify({ws:SETTINGS.sheetTab,name:S.name,cls:S.cls,cols});
+}
+let timer=null;
+function send(status){
+  if(!SHEET_ON||!S.name)return false;
+  try{fetch(SETTINGS.sheetUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:payload(status),keepalive:true}).catch(()=>{});return true;}catch(e){return false;}
+}
+function queue(){clearTimeout(timer);timer=setTimeout(()=>send(S.done?"Finished":"In progress (Q"+(S.q+1)+")"),5000);}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&SHEET_ON&&S.name){try{navigator.sendBeacon(SETTINGS.sheetUrl,new Blob([payload(S.done?"Finished":"In progress (Q"+(S.q+1)+")")],{type:"text/plain"}));}catch(e){}}});
+
+/* ===================== read aloud ===================== */
+function speak(t){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-GB";u.rate=.85;speechSynthesis.speak(u);}catch(e){}}
+
+/* ===================== screens ===================== */
+const app=document.getElementById("app"), nav=document.getElementById("nav");
+function chooseClass(){
+  nav.style.display="none";document.getElementById("who").textContent="";
+  const cl=Object.keys(SETTINGS.classes);
+  if(cl.length===1){S.cls=cl[0];return chooseName();}
+  app.innerHTML=`<div class="title"><h2>Which class are you in?</h2><p>Tap your class.</p></div><div class="choices">${cl.map(c=>`<button class="choice big" data-c="${c}">${c}</button>`).join("")}</div>`;
+  app.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{S.cls=b.dataset.c;chooseName();});
+}
+function chooseName(){
+  const names=SETTINGS.classes[S.cls]||[];
+  app.innerHTML=`<div class="title"><h2>Tap your name</h2><p>Class ${S.cls} · <a href="#" id="back">change class</a></p></div><div class="choices">${names.map(n=>`<button class="choice" data-n="${n.replace(/"/g,"&quot;")}">${n}</button>`).join("")}</div>`;
+  document.getElementById("back").onclick=e=>{e.preventDefault();chooseClass();};
+  app.querySelectorAll("[data-n]").forEach(b=>b.onclick=()=>{S.name=b.dataset.n;S.ans={};S.q=0;S.done=false;S.started="";load();ready();});
+}
+function ready(){
+  document.getElementById("who").textContent=S.name+" · "+S.cls;
+  const resume=Object.keys(S.ans).length>0&&!S.done;
+  app.innerHTML=`<div class="card center"><h2 style="margin-top:0">Hello, ${S.name}!</h2>
+   <p>This is your <b>addition and subtraction</b> check. There are <b>10 questions</b>.</p>
+   <p>Take your time. Press 🔊 to hear a question read to you.</p>
+   <p>Your answers are sent to ${SETTINGS.teacher} when you finish.</p>
+   <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:20px">
+   <button class="btn gold" id="go">${resume?"Carry on":S.done?"Look at my answers":"Start"}</button>
+   <button class="btn ghost" id="notme">This is not me</button></div></div>`;
+  document.getElementById("go").onclick=()=>{if(!S.started)S.started=new Date().toLocaleString("en-GB");save();show(S.done?QS.length:S.q);};
+  document.getElementById("notme").onclick=()=>{S.name="";chooseName();};
+}
+function show(i){
+  S.q=i;save();
+  if(i>=QS.length) return review();
+  const q=QS[i];
+  app.innerHTML=`<div class="card"><div class="qhead"><div class="qnum">${q.n}</div>${q.html()}<button class="speak" title="Read it to me" id="spk">🔊</button></div>${q.body()}<div class="marks">${q.marks} mark${q.marks>1?"s":""}</div></div><p class="copy">© White Rose Education 2024</p>`;
+  document.getElementById("spk").onclick=()=>speak(q.say);
+  wire();
+  drawNav();
+  const first=app.querySelector("input:not(.carry),textarea");
+  if(first && window.innerWidth>700){const o=[...app.querySelectorAll("input.dig:not(.carry)")];(o.length?o.sort((a,b)=>a.dataset.order-b.dataset.order)[0]:first).focus();}
+}
+function wire(){
+  app.querySelectorAll("[data-id]").forEach(el=>{
+    const id=el.dataset.id; if(S.ans[id]!=null) el.value=S.ans[id];
+    el.addEventListener("input",()=>{
+      if(el.tagName==="INPUT"){el.value=el.value.replace(/[^0-9]/g,"");}
+      if(el.classList.contains("dig")){el.value=el.value.slice(-1);
+        // column method: move to the next column to the LEFT (next in order)
+        if(el.value!==""){const ord=+el.dataset.order,isC=el.classList.contains("carry");
+          const nxt=[...app.querySelectorAll("input.dig")].find(x=>+x.dataset.order===ord+1&&x.classList.contains("carry")===isC);
+          if(nxt)nxt.focus();}}
+      S.ans[id]=el.value;save();queue();drawNav();
+    });
+  });
+}
+function drawNav(){
+  nav.style.display="flex";
+  const i=S.q;
+  nav.innerHTML=`<button class="btn ghost" id="prev" ${i===0?"disabled":""}>◀ Back</button>
+   <div class="dots">${QS.map((q,k)=>`<div class="dot ${k===i?"now":answered(q)?"done":""}" data-k="${k}">${q.n}</div>`).join("")}</div>
+   <button class="btn ${i===QS.length-1?"gold":""}" id="next">${i>=QS.length-1?"Finish ✔":"Next ▶"}</button>`;
+  document.getElementById("prev").onclick=()=>show(i-1);
+  document.getElementById("next").onclick=()=>show(i+1);
+  nav.querySelectorAll("[data-k]").forEach(d=>d.onclick=()=>show(+d.dataset.k));
+}
+function review(){
+  speechSynthesis&&speechSynthesis.cancel&&speechSynthesis.cancel();
+  const missing=QS.filter(q=>!answered(q));
+  nav.innerHTML=`<button class="btn ghost" id="prev">◀ Back</button><span></span><span></span>`;
+  document.getElementById("prev").onclick=()=>show(QS.length-1);
+  if(S.done){
+    app.innerHTML=`<div class="card center"><h2 style="margin-top:0">⭐ Well done, ${S.name}! ⭐</h2><p>Your answers have been sent to ${SETTINGS.teacher}.</p><p>You can close this page now.</p>
+     <button class="btn ghost" id="again">Send again</button><p id="msg"></p></div>`;
+    document.getElementById("again").onclick=()=>{document.getElementById("msg").textContent=send("Finished")?"Sent again ✔":"Could not send. Tell your teacher.";};
+    return;
+  }
+  app.innerHTML=`<div class="card"><h2 style="margin-top:0">Check your work</h2>
+   ${missing.length?`<p class="miss">You have not finished question${missing.length>1?"s":""} ${missing.map(q=>q.n).join(", ")}.</p><p>Tap a number to go back to it.</p>
+   <div class="dots" style="justify-content:flex-start">${missing.map(q=>`<div class="dot" data-k="${QS.indexOf(q)}">${q.n}</div>`).join("")}</div>`:`<p>You have answered every question. Brilliant!</p>`}
+   <p style="margin-top:20px">When you are happy, press the button to send your answers to ${SETTINGS.teacher}.</p>
+   <div class="center"><button class="btn gold" id="send">I have finished – send my answers</button></div><p id="msg" class="center"></p></div>`;
+  app.querySelectorAll("[data-k]").forEach(d=>d.onclick=()=>show(+d.dataset.k));
+  document.getElementById("send").onclick=()=>{
+    if(missing.length&&!confirm("Some questions are not finished. Send anyway?"))return;
+    S.done=true;save();clearTimeout(timer);
+    const ok=send("Finished");
+    if(!ok&&SHEET_ON){document.getElementById("msg").textContent="Could not send. Tell your teacher.";return;}
+    review();
+  };
+}
+chooseClass();
+</script>
+</body>
+</html>
